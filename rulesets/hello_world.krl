@@ -7,7 +7,7 @@ A first ruleset for the Quickstart
     author "Phil Windley"
     logging on
     shares hello
-  }
+ 
   
   global {
     hello = function(obj) {
