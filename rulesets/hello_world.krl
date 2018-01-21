@@ -1,5 +1,3 @@
-// click on a ruleset name to see its source here
-
 ruleset hello_world {
   meta {
     name "Hello World"
