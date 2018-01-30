@@ -1,4 +1,4 @@
-ruleset twilio {
+ruleset use_twilio {
   meta {
     configure using account_sid = ""
                     auth_token = ""
