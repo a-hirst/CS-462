@@ -8,16 +8,21 @@ ruleset use_twilio {
  
   rule test_send_sms {
     select when test new_message
-    
-    pre {
-      name = event:attr("to").klog("our passed in to: ") ;
-      thing = event:attr("from").klog("our passed in from: ") ;
-      that = event:attr("message").klog("our passed in message: ") ;
-      message = (name) => ("Hello " + name) | "Hello Monkey"
-    }
+
     twilio:send_sms(event:attr("to"),
                     event:attr("from"),
                     event:attr("message")
                    )
   }
+  
+  rule get_sms_logs {
+    select when test message_logs
+    
+    pre {
+    logs = twilio:messages(event:attr("to"),
+                    event:attr("from"))
+    }
+    send_directive("logs", {"sms": logs})
+  }
 }
+
