@@ -3,13 +3,18 @@ ruleset twilio {
     configure using account_sid = ""
                     auth_token = ""
     provides
-        send_sms
+        send_sms,
+        messages
   }
  
   global {
-    messages = function() {
-       base_url = <<https://#{account_sid}:#{auth_token}@api.twilio.com/2010-04-01/Accounts/#{account_sid}/>>
-       http:get(base_url + "SMS/Messages.json")
+    
+    messages = defaction(to, from) {
+      base_url = <<https://#{account_sid}:#{auth_token}@api.twilio.com/2010-04-01/Accounts/#{account_sid}/>>
+      http:get(base_url + "Messages.json", qs = {
+        "From": from,
+        "To": to
+      })
     }
   
     send_sms = defaction(to, from, message) {
