@@ -5,8 +5,21 @@ ruleset wovyn_base {
     pre {
       wovyn_data = event:attrs.klog("attrs");
       genericThing = event:attr("genericThing").klog("generic");
+      temperature = wovyn_data{["genericThing", "data", "temperature"]}[0]{["temperatureF"]}.klog("temp2");
+      timestamp = time:now().klog("timestamp");
     }
-    send_directive("heartbeat", {"attrs": wovyn_data});
+    every {
+      event:send({
+        "eci":"TM3Ui4g4winMhjLxMKrWuN", 
+        "domain":"wovyn", 
+        "type":"new_temperature_reading", 
+        "attrs":{
+          "temperature": temperature,
+          "timestamp": timestamp
+        }})
+
+      send_directive("heartbeat", {"attrs": wovyn_data});
+    }
   }
   
 }
