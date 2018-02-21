@@ -8,7 +8,7 @@ ruleset wovyn_base {
   }
   
   global {
-    temperature_threshold = 40
+    temperature_threshold = 90
     sms_num = "+13853353015"
   }
   
@@ -55,9 +55,8 @@ ruleset wovyn_base {
     }
     twilio:send_sms(sms_num,
                     "+19513098481",
-                    event:attr("message")
+                    message)
                    )
-    // send_directive("temperature violation", {"attrs": temperature})
   }
   
 }
