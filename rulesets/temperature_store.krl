@@ -48,7 +48,7 @@ ruleset temperature_store {
     }
   }
   
-  rule clear_tempeartures {
+  rule clear_temperatures {
     select when sensor reading_reset
     fired {
       ent:temperatures := [];
