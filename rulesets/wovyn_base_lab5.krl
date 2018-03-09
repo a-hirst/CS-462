@@ -8,10 +8,6 @@ ruleset wovyn_base {
              auth_token =  keys:twilio{"auth_token"}
   }
   
-  global {
-    temperature_threshold = sensor_profile:temp_threshold()
-    sms_num = sensor_profile:sms_notify_num()
-  }
   
   rule process_heartbeat {
     select when wovyn heartbeat genericThing re#[^\0]#
@@ -41,10 +37,10 @@ ruleset wovyn_base {
     pre {
       temperature = event:attr("temperature")
     }
-    send_directive("find high temps", {"body": {"violation": (temperature > temperature_threshold)}}) 
+    send_directive("find high temps", {"body": {"violation": (temperature > sensor_profile:temp_threshold())}}) 
     
     always {
-      raise wovyn event "threshold_violation" attributes event:attrs if (temperature > temperature_threshold );
+      raise wovyn event "threshold_violation" attributes event:attrs if (temperature > sensor_profile:temp_threshold() );
     } 
   }
   
@@ -55,7 +51,7 @@ ruleset wovyn_base {
       message = "Temperature Violation: temperature is " + event:attr("temperature") 
       + ", timestamp: " + event:attr("timestamp")
     }
-    twilio:send_sms(sms_num,
+    twilio:send_sms(sensor_profile:sms_notify_num(),
                     "+19513098481",
                     message
                    )
