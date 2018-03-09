@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+  <title>Temperatures</title>
+  <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+  <script src="temps.js"></script>
+  <style type="text/css">
+    span.error { color: firebrick; font-weight:bold; }
+  </style>
+</head>
+<body ng-app="temperatures" ng-controller="MainCtrl">
+<div class="row">
+<div class="col-md-8 col-md-offset-2">
+  <div ng-if="page == 'temps'">
+    <div class="page-header"> 
+      <h1>Temperatures</h1>
+    </div>
+    <div>
+      <button style="float:right" ng-click="changePage('updateProfile')">Update Sensor Profile</button>
+      <h3>Current Temperature: {{currTemp.temperature}} degrees</h3>
+    </div>
+    <h4>Recent Temperatures:</h4>
+    <div ng-repeat="temperature in temperatures" >
+      <span ng-class="{'error': temperature.violation}">{{temperature.temperature}} degrees 
+      ({{temperature.time}})</span>
+      <span ng-if="temperature.violation" class="error">- Threshold Violation</span>
+      </div>
+  </div>
+  <div ng-if="page == 'updateProfile'">
+    <div class="page-header"> 
+      <h1>Update Profile</h1>
+    </div>
+     <button style="float:right" ng-click="changePage('temps')">Back to Temperatures</button>
+     <form>
+     <div class="row">
+      <div class="col-md-3 col-md-offset-1">Sensor Name</div>
+      <input type="text" ng-model="sensorName">
+    </div>
+     <div class="row">
+      <div class="col-md-3 col-md-offset-1">Sensor Location</div>
+      <input type="text" ng-model="sensorLoc">
+    </div>
+     <div class="row">
+      <div class="col-md-3 col-md-offset-1">Contact Number</div>
+      <input type="text" id="smsNum" ng-model="smsNum" placeholder="+15552223333"> 
+    </div>
+     <div class="row">
+      <div class="col-md-3 col-md-offset-1">Temperature Threshold (degrees)</div>
+      <input type="text" ng-model="tempThreshold" placeholder="e.g. 80">
+    </div>
+    <div class="row">
+      <div class="col-md-offset-2">
+        <br/>
+        <button class="col-md-3" ng-click="updateProfile(sensorName, sensorLoc, smsNum, tempThreshold)">Update Profile</button>
+      </div>
+    </div>
+  </form>
+  </div>
+</div>
+</div>
+</body>
+</html>
